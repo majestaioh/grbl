@@ -154,7 +154,8 @@ void report_init_message()
 // Grbl help message
 void report_grbl_help() {
   #ifndef REPORT_GUI_MODE
-    printPgmString(PSTR("$$ (view Grbl settings)\r\n"
+    printPgmString(PSTR("Hello Grbl customized hajime\r\n"
+                        "$$ (view Grbl settings)\r\n"
                         "$# (view # parameters)\r\n"
                         "$G (view parser state)\r\n"
                         "$I (view build info)\r\n"

@@ -280,17 +280,32 @@ void st_go_idle()
 // with probing and homing cycles that require true real-time positions.
 ISR(TIMER1_COMPA_vect)
 {        
+  uint8_t dir_outbits = 0;
+  uint8_t stp_outbits = 0;
+
 // SPINDLE_ENABLE_PORT ^= 1<<SPINDLE_ENABLE_BIT; // Debug: Used to time ISR
   if (busy) { return; } // The busy-flag is used to avoid reentering this interrupt
   
   // Set the direction pins a couple of nanoseconds before we step the steppers
-  DIRECTION_PORT = (DIRECTION_PORT & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK);
+  dir_outbits = (DIRECTION_PORT & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK);
+  if( dir_outbits & ( 1<<Y_DIRECTION_BIT ) ) {
+    DIRECTION_SUB_PORT = DIRECTION_SUB_PORT & ~( 1<<DIRECTION_SUB_BIT );
+  } else {
+    DIRECTION_SUB_PORT = DIRECTION_SUB_PORT | ( 1<<DIRECTION_SUB_BIT );
+  }
+  DIRECTION_PORT = dir_outbits;
 
   // Then pulse the stepping pins
   #ifdef STEP_PULSE_DELAY
     st.step_bits = (STEP_PORT & ~STEP_MASK) | st.step_outbits; // Store out_bits to prevent overwriting.
   #else  // Normal operation
-    STEP_PORT = (STEP_PORT & ~STEP_MASK) | st.step_outbits;
+    stp_outbits = (STEP_PORT & ~STEP_MASK) | st.step_outbits;
+    if( stp_outbits & ( 1<<Y_STEP_BIT ) ) {
+      STEP_SUB_PORT = STEP_SUB_PORT | ( 1<<STEP_SUB_BIT );
+    } else {
+      STEP_SUB_PORT = STEP_SUB_PORT & ~( 1<<STEP_SUB_BIT );
+    }
+    STEP_PORT = stp_outbits;
   #endif  
 
   // Enable step pulse reset timer so that The Stepper Port Reset Interrupt can reset the signal after
@@ -475,6 +490,9 @@ void stepper_init()
   STEP_DDR |= STEP_MASK;
   STEPPERS_DISABLE_DDR |= 1<<STEPPERS_DISABLE_BIT;
   DIRECTION_DDR |= DIRECTION_MASK;
+
+  STEP_SUB_DDR |= STEP_SUB_MASK;
+  DIRECTION_SUB_DDR |= DIRECTION_SUB_MASK;
 
   // Configure Timer 1: Stepper Driver Interrupt
   TCCR1B &= ~(1<<WGM13); // waveform generation = 0100 = CTC

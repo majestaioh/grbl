@@ -106,6 +106,13 @@ List of Supported G-Codes in Grbl v0.9 Master:
   - Valid Non-Command Words: F, I, J, K, L, N, P, R, S, T, X, Y, Z
 ```
 
+---
+
+## majestaiohでの特殊改造
+- ライブラリではない状態で書き込めるようにするため、grbl.inoを追加
+
+
+
 -------------
 Grbl is an open-source project and fueled by the free-time of our intrepid administrators and altruistic users. If you'd like to donate, all proceeds will be used to help fund supporting hardware and testing equipment. Thank you!
 

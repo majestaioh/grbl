@@ -41,13 +41,27 @@
 #define Z_STEP_BIT      4  // Uno Digital Pin 4
 #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)) // All step bits
 
+// 改造
+// STEP_SUB
+#define STEP_SUB_DDR       DDRC
+#define STEP_SUB_PORT      PORTC
+#define STEP_SUB_BIT       4  // Uno Analog Pin 4 used as digital output
+#define STEP_SUB_MASK      (1<<STEP_SUB_BIT)
+
 // Define step direction output pins. NOTE: All direction pins must be on the same port.
 #define DIRECTION_DDR     DDRD
 #define DIRECTION_PORT    PORTD
-#define X_DIRECTION_BIT   5  // Uno Digital Pin 5
-#define Y_DIRECTION_BIT   6  // Uno Digital Pin 6
-#define Z_DIRECTION_BIT   7  // Uno Digital Pin 7
+#define X_DIRECTION_BIT      5  // Uno Digital Pin 5
+#define Y_DIRECTION_BIT      6  // Uno Digital Pin 6
+#define Z_DIRECTION_BIT      7  // Uno Digital Pin 7
 #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)) // All direction bits
+
+// 改造
+// DIRECTION_SUB
+#define DIRECTION_SUB_DDR       DDRC
+#define DIRECTION_SUB_PORT      PORTC
+#define DIRECTION_SUB_BIT       5  // Uno Analog Pin 5 used as digital output
+#define DIRECTION_SUB_MASK      (1<<DIRECTION_SUB_BIT)
 
 // Define stepper driver enable/disable output pin.
 #define STEPPERS_DISABLE_DDR    DDRB
